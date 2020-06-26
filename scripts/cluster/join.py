@@ -434,7 +434,8 @@ def delete_dqlite_node(delete_node, dqlite_ep):
                     "{snappath}/bin/dqlite -s file://{dbdir}/cluster.yaml -c {dbdir}/cluster.crt "
                     "-k {dbdir}/cluster.key -f json k8s".format(
                         snappath=snap_path, dbdir=cluster_dir
-                    ).split())
+                    ).split()
+                )
                 cmd.append(".remove {}".format(delete_node[0]))
                 subprocess.check_output(cmd)
                 break
@@ -761,7 +762,8 @@ def update_dqlite(cluster_cert, cluster_key, voters, host):
                 "{snappath}/bin/dqlite -s file://{dbdir}/cluster.yaml -c {dbdir}/cluster.crt "
                 "-k {dbdir}/cluster.key -f json k8s .cluster".format(
                     snappath=snap_path, dbdir=cluster_dir
-                ).split(), timeout=4
+                ).split(),
+                timeout=4,
             )
             if host in out.decode():
                 break

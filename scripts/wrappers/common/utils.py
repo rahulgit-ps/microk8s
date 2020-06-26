@@ -74,7 +74,8 @@ def get_dqlite_info():
                     "{snappath}/bin/dqlite -s file://{dbdir}/cluster.yaml -c {dbdir}/cluster.crt "
                     "-k {dbdir}/cluster.key -f json k8s .cluster".format(
                         snappath=snap_path, dbdir=cluster_dir
-                    ).split(), timeout=4
+                    ).split(),
+                    timeout=4,
                 )
                 if data['Address'] in out.decode():
                     break
