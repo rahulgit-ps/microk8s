@@ -1,4 +1,5 @@
 import yaml
+import json
 import os
 import subprocess
 import sys
@@ -89,7 +90,7 @@ def get_dqlite_info():
     if waits == 0:
         return info
 
-    nodes = yaml.safe_load(out)
+    nodes = json.load(out.decode())
     for n in nodes:
         if n["Role"] == 0:
             info.append((n["Address"], "voter"))
