@@ -457,8 +457,6 @@ def get_dqlite_voters():
     """
     snapdata_path = "/var/snap/microk8s/current"
     cluster_dir = "{}/var/kubernetes/backend".format(snapdata_path)
-    cluster_cert_file = "{}/cluster.crt".format(cluster_dir)
-    cluster_key_file = "{}/cluster.key".format(cluster_dir)
 
     waits = 10
     print("Waiting for access to cluster.", end=" ", flush=True)
@@ -486,7 +484,7 @@ def get_dqlite_voters():
     if waits == 0:
         raise Exception("Could not get cluster info")
 
-    nodes = yaml.safe_load(out)
+    nodes = json.loads(out.decode())
     voters = []
     for n in nodes:
         if n["Role"] == 0:

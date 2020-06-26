@@ -433,7 +433,7 @@ def delete_dqlite_node(delete_node, dqlite_ep):
                 subprocess.check_output(
                     "{snappath}/bin/dqlite -s file://{dbdir}/cluster.yaml -c {dbdir}/cluster.crt "
                     "-k {dbdir}/cluster.key -f json k8s .remove {ep}".format(
-                        snappath=snap_path, ep=delete_node[0],
+                        snappath=snap_path, dbdir=cluster_dir, ep=delete_node[0]
                     ).split()
                 )
                 break
