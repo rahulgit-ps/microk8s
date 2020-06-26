@@ -59,6 +59,8 @@ def get_dqlite_info():
     cluster_dir = os.path.expandvars("${SNAP_DATA}/var/kubernetes/backend")
     cluster_cert_file = "{}/cluster.crt".format(cluster_dir)
     cluster_key_file = "{}/cluster.key".format(cluster_dir)
+    snap_path = os.environ.get('SNAP')
+
     info = []
 
     if not is_ha_enabled():
@@ -70,8 +72,9 @@ def get_dqlite_info():
             with open("{}/info.yaml".format(cluster_dir), mode='r') as f:
                 data = yaml.load(f, Loader=yaml.FullLoader)
                 out = subprocess.check_output(
-                    "curl https://{}/cluster/ --cacert {} --key {} --cert {} -k -s".format(
-                        data['Address'], cluster_cert_file, cluster_key_file, cluster_cert_file
+                    "{snappath}/bin/dqlite -s file://{dbdir}/cluster.yaml -c {dbdir}/cluster.crt "
+                    "-k {dbdir}/cluster.key -f json k8s .cluster".format(
+                        snappath=snap_path, dbdir=cluster_dir
                     ).split()
                 )
                 if data['Address'] in out.decode():
