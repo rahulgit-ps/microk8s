@@ -430,12 +430,13 @@ def delete_dqlite_node(delete_node, dqlite_ep):
     if len(delete_node) > 0 and "127.0.0.1" not in delete_node[0]:
         for ep in dqlite_ep:
             try:
-                subprocess.check_output(
+                cmd = (
                     "{snappath}/bin/dqlite -s file://{dbdir}/cluster.yaml -c {dbdir}/cluster.crt "
-                    "-k {dbdir}/cluster.key -f json k8s .remove {ep}".format(
-                        snappath=snap_path, dbdir=cluster_dir, ep=delete_node[0]
-                    ).split()
-                )
+                    "-k {dbdir}/cluster.key -f json k8s".format(
+                        snappath=snap_path, dbdir=cluster_dir
+                    ).split())
+                cmd.append(".remove {}".format(delete_node[0]))
+                subprocess.check_output(cmd)
                 break
             except Exception as err:
                 print("Contacting node {} failed. Error:".format(ep))
@@ -762,7 +763,7 @@ def update_dqlite(cluster_cert, cluster_key, voters, host):
                     snappath=snap_path, dbdir=cluster_dir
                 ).split(), timeout=4
             )
-            if data['Address'] in out.decode():
+            if host in out.decode():
                 break
             else:
                 print(".", end=" ", flush=True)
